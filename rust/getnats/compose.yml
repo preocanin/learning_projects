@@ -1,0 +1,10 @@
+services:
+  nats:
+    image: nats:2.15.1-alpine
+    restart: always
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    volumes:
+      - ./docker/nats.conf:/etc/nats/nats.conf
+    command: ["-c", "/etc/nats/nats.conf"]
