@@ -1,4 +1,5 @@
-use std::process::{Command, exit};
+use std::{process::{Command, exit}};
+use bebop_tools as bebop;
 
 fn run(cmd: &str, args: &[&str]) {
     let status = Command::new(cmd).args(args).status().unwrap_or_else(|e| {
@@ -11,6 +12,13 @@ fn run(cmd: &str, args: &[&str]) {
     }
 }
 
+fn bebop_generate() {
+    bebop::download_bebopc(std::path::PathBuf::from("target"));
+
+    bebop::build_schema_dir("messages/schemas", "messages", &bebop::BuildConfig::default());
+
+}
+
 fn main() {
     let task = std::env::args().nth(1);
 
@@ -18,6 +26,7 @@ fn main() {
         Some("docker:up") => run("docker", &["compose", "up", "-d"]),
         Some("docker:down") => run("docker", &["compose", "down"]),
         Some("docker:logs") => run("docker", &["compose", "logs", "-f"]),
+        Some("bebop:generate") => bebop_generate(),
         _ => {
             eprintln!("tasks: docker:up | docker:down | docker:lobs");
             exit(1);
