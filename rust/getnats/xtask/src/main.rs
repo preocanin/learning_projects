@@ -23,6 +23,14 @@ fn main() {
     let task = std::env::args().nth(1);
 
     match task.as_deref() {
+        Some("build") => {
+            bebop_generate();
+            run("cargo", &["build"]);
+        },
+        Some("build:rel") => {
+            bebop_generate();
+            run("cargo", &["build", "--release"]);
+        }
         Some("docker:up") => run("docker", &["compose", "up", "-d"]),
         Some("docker:down") => run("docker", &["compose", "down"]),
         Some("docker:logs") => run("docker", &["compose", "logs", "-f"]),
